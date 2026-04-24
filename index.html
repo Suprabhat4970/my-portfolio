@@ -220,8 +220,15 @@ footer{border-top:1px solid var(--border);padding:28px 6vw;display:flex;justify-
 
 @media(max-width:900px){.skill-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:700px){
-  #hero{grid-template-columns:1fr;padding-top:110px;}
-  .hero-visual{display:none;}
+  #hero{grid-template-columns:1fr;padding-top:90px;padding-bottom:50px;gap:36px;}
+  .hero-name{font-size:clamp(2.4rem,10vw,3.8rem);letter-spacing:-1px;}
+  .hero-visual{display:flex;justify-content:center;order:-1;}
+  .o2,.o3{display:none;}
+  .o1{width:180px;height:180px;}
+  .photo-ring{width:140px;height:140px;}
+  .photo-ring img{width:140px;height:140px;}
+  .hero-btns{flex-direction:column;}
+  .btn-primary,.btn-resume,.btn-outline{text-align:center;}
   .about-grid,.contact-grid,.proj-grid{grid-template-columns:1fr;}
   .skill-grid{grid-template-columns:1fr;}
   .nav-links{display:none;}
