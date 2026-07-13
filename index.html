@@ -23,6 +23,26 @@
         --text: #e8f4f8;
         --muted: #5a7a8a;
         --border: #162533;
+        --nav-bg: rgba(6, 11, 16, 0.95);
+        --card-bg: #0a1520;
+        --terminal-bg: #020c12;
+        --resume-bg: #1a1a2e;
+        color-scheme: dark;
+      }
+      body.light {
+        --bg: #f7fbff;
+        --surface: #ffffff;
+        --accent: #006dff;
+        --pink: #ff4f8b;
+        --gold: #f7a600;
+        --text: #142033;
+        --muted: #5d6b7a;
+        --border: #dce6ef;
+        --nav-bg: rgba(255, 255, 255, 0.9);
+        --card-bg: #f7fbff;
+        --terminal-bg: #f2f7fb;
+        --resume-bg: #f8fbff;
+        color-scheme: light;
       }
       html {
         scroll-behavior: smooth;
@@ -32,6 +52,7 @@
         color: var(--text);
         font-family: "Syne", sans-serif;
         overflow-x: hidden;
+        transition: background 0.3s ease, color 0.3s ease;
       }
 
       /* LOADER */
@@ -107,9 +128,29 @@
         align-items: center;
         justify-content: space-between;
         padding: 18px 6vw;
-        background: rgba(6, 11, 16, 0.95);
+        background: var(--nav-bg);
         backdrop-filter: blur(14px);
         border-bottom: 1px solid var(--border);
+      }
+      .theme-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text);
+        font-family: "Space Mono", monospace;
+        font-size: 0.6rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: border-color 0.2s, color 0.2s, transform 0.2s;
+      }
+      .theme-toggle:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-1px);
       }
       .nav-logo {
         font-family: "Space Mono", monospace;
@@ -483,7 +524,7 @@
         gap: 18px;
       }
       .sk-card {
-        background: #0a1520;
+        background: var(--card-bg);
         border: 1px solid var(--border);
         padding: 22px 20px;
         position: relative;
@@ -809,7 +850,7 @@
         background: rgba(0, 245, 212, 0.1);
       }
       .resume-embed {
-        background: #1a1a2e;
+        background: var(--resume-bg);
         min-height: 600px;
         display: flex;
         flex-direction: column;
@@ -938,7 +979,7 @@
         width: 26px;
       }
       .terminal {
-        background: #020c12;
+        background: var(--terminal-bg);
         border: 1px solid var(--border);
         font-family: "Space Mono", monospace;
         font-size: 0.7rem;
@@ -1107,15 +1148,21 @@
     <!-- NAV -->
     <nav>
       <a href="#" class="nav-logo">SJ</a>
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#education">Education</a></li>
-        <li><a href="#resume-section">Resume</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme" aria-pressed="false">
+          <span id="themeIcon">🌙</span>
+          <span id="themeLabel">Night</span>
+        </button>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#resume-section">Resume</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
     </nav>
 
     <!-- HERO -->
@@ -1599,6 +1646,38 @@
     </footer>
 
     <script>
+      const themeToggle = document.getElementById("themeToggle");
+      const themeIcon = document.getElementById("themeIcon");
+      const themeLabel = document.getElementById("themeLabel");
+
+      function applyTheme(theme) {
+        document.body.classList.toggle("light", theme === "light");
+        document.body.setAttribute("data-theme", theme);
+        if (themeToggle) {
+          themeToggle.setAttribute("aria-pressed", String(theme === "light"));
+        }
+        if (themeIcon) {
+          themeIcon.textContent = theme === "light" ? "☀️" : "🌙";
+        }
+        if (themeLabel) {
+          themeLabel.textContent = theme === "light" ? "Day" : "Night";
+        }
+        localStorage.setItem("portfolio-theme", theme);
+      }
+
+      const savedTheme = localStorage.getItem("portfolio-theme");
+      const preferredTheme = window.matchMedia("(prefers-color-scheme: light)").matches
+        ? "light"
+        : "dark";
+      applyTheme(savedTheme || preferredTheme);
+
+      if (themeToggle) {
+        themeToggle.addEventListener("click", () => {
+          const nextTheme = document.body.classList.contains("light") ? "dark" : "light";
+          applyTheme(nextTheme);
+        });
+      }
+
       // LOADER
       const ldBar = document.getElementById("ldBar");
       const ldNum = document.getElementById("ldNum");
